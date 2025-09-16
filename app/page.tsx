@@ -53,7 +53,7 @@ export default function Main() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="/dashboard">GPT Pro</BreadcrumbLink>
+                <BreadcrumbLink href="/">GPT Pro</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
             </BreadcrumbList>
