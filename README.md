@@ -2,20 +2,16 @@
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![NextJS](https://img.shields.io/badge/Built_with-NextJS-blue)
-![OpenAI API](https://img.shields.io/badge/Powered_by-OpenAI_API-orange)
 
-This repository contains a NextJS starter app built on top of the [Responses API](https://platform.openai.com/docs/api-reference/responses).
+This repository contains a NextJS app built on top of the [Responses API](https://platform.openai.com/docs/api-reference/responses).
 It leverages built-in tools ([web search](https://platform.openai.com/docs/guides/tools-web-search?api-mode=responses) and [file search](https://platform.openai.com/docs/guides/tools-file-search)) and implements a chat interface with multi-turn conversation handling.
 
 Features:
 
 - Multi-turn conversation handling
 - Streaming responses & tool calls
-- Function calling
 - Display annotations
 - Web search tool configuration
-- Vector store creation & file upload for use with the file search tool
-- MCP server configuration
 - Google Calendar & Gmail integration via first-party connector
 
 This app is meant to be used as a starting point to build a conversational assistant that you can customize to your needs.
@@ -41,7 +37,7 @@ This app is meant to be used as a starting point to build a conversational assis
 3. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/openai/openai-responses-starter-app.git
+   git clone https://github.com/duong2604/AI-Assistant
    ```
 
 4. **Install dependencies:**
@@ -82,7 +78,7 @@ The UI allows you to configure a public MCP server to use with the Responses API
 
 ### Custom functions
 
-This demo app comes with example functions, `get_weather` and `get_joke`. You can add your own functions to the `config/functions.ts` file.
+This demo app comes with example functions
 
 ### Google integration
 
