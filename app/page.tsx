@@ -1,15 +1,30 @@
 "use client";
 import Assistant from "@/components/assistant";
-import ToolsPanel from "@/components/tools-panel";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useConversationStore from "@/stores/useConversationStore";
+import useToolsStore from "@/stores/useToolsStore";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function Main() {
   const [isToolsPanelOpen, setIsToolsPanelOpen] = useState(false);
   const router = useRouter();
   const { resetConversation } = useConversationStore();
+  const { setVectorStore } = useToolsStore();
+
+  const initialVectorStore = {
+    id: `${process.env.NEXT_PUBLIC_OPENAI_VECTOR_STORE_ID}`,
+    name: "Example",
+  };
 
   // After OAuth redirect, reinitialize the conversation so the next turn
   // uses the connector-enabled server configuration immediately
@@ -24,32 +39,32 @@ export default function Main() {
     }
   }, [router, resetConversation]);
 
-  return (
-    <div className="flex justify-center h-screen">
-      {/* Hamburger menu for small screens */}
-      <div className="absolute top-4 left-4 md:hidden">
-        <button onClick={() => setIsToolsPanelOpen(true)}>
-          <Menu size={24} />
-        </button>
-      </div>
-      {/* Overlay panel for ToolsPanel on small screens */}
-      {isToolsPanelOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black bg-opacity-30">
-          <div className="w-full bg-white h-full p-4">
-            <button className="mb-4" onClick={() => setIsToolsPanelOpen(false)}>
-              <X size={24} />
-            </button>
-            <ToolsPanel />
-          </div>
-        </div>
-      )}
+  // Initialize a vector store
+  useEffect(() => {
+    setVectorStore(initialVectorStore);
+  }, []);
 
-      <div className=" hidden md:block w-[30%]">
-        <ToolsPanel />
+  return (
+    <>
+      <header className="flex h-16 shrink-0 items-center gap-2 border-b">
+        <div className="flex items-center gap-2 px-3">
+          <SidebarTrigger />
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href="/dashboard">GPT Pro</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </header>
+      <div className="flex flex-1 flex-col gap-4 p-4 h-2/3 ">
+        <div className="bg-muted/50  flex-1 h-2/3 rounded-xl ">
+          <Assistant />
+        </div>
       </div>
-      <div className="w-full md:w-[70%]">
-        <Assistant />
-      </div>
-    </div>
+    </>
   );
 }

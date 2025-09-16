@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,9 +34,14 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex h-screen bg-gray-200 w-full flex-col  text-stone-900">
-          <main>{children}</main>
-        </div>
+        <SidebarProvider
+          style={{ "--sidebar-width": "25rem" } as React.CSSProperties}
+        >
+          <AppSidebar />
+          <SidebarInset className="h-screen overflow-hidden">
+            <>{children}</>
+          </SidebarInset>
+        </SidebarProvider>
       </body>
     </html>
   );

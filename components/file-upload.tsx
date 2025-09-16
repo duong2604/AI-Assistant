@@ -185,52 +185,8 @@ export default function FileUpload({
       <DialogContent className="sm:max-w-[500px] md:max-w-[600px] max-h-[80vh] overflow-y-scrollfrtdtd">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Add files to your vector store</DialogTitle>
+            <DialogTitle>Add files to the cloud store</DialogTitle>
           </DialogHeader>
-          <div className="my-6">
-            {!vectorStoreId || vectorStoreId === "" ? (
-              <div className="flex items-start gap-2 text-sm">
-                <label className="font-medium w-72" htmlFor="storeName">
-                  New vector store name
-                  <div className="text-xs text-zinc-400">
-                    A new store will be created when you upload a file.
-                  </div>
-                </label>
-                <Input
-                  id="storeName"
-                  type="text"
-                  value={newStoreName}
-                  onChange={(e) => setNewStoreName(e.target.value)}
-                  className="border rounded p-2"
-                />
-              </div>
-            ) : (
-              <div className="flex items-center justify-between flex-1 min-w-0">
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="text-sm font-medium w-24 text-nowrap">
-                    Vector store
-                  </div>
-                  <div className="text-zinc-400  text-xs font-mono flex-1 text-ellipsis truncate">
-                    {vectorStoreId}
-                  </div>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <CircleX
-                          onClick={() => onUnlinkStore()}
-                          size={16}
-                          className="cursor-pointer text-zinc-400 mb-0.5 shrink-0 mt-0.5 hover:text-zinc-700 transition-all"
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Unlink vector store</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </div>
-            )}
-          </div>
           <div className="flex justify-center items-center mb-4 h-[200px]">
             {file ? (
               <div className="flex flex-col items-start">
