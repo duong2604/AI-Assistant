@@ -1,9 +1,9 @@
-import { parse } from "partial-json";
+import { Annotation } from "@/components/annotations";
+import { functionsMap } from "@/config/functions";
 import { handleTool } from "@/lib/tools/tools-handling";
 import useConversationStore from "@/stores/useConversationStore";
 import useToolsStore, { ToolsState } from "@/stores/useToolsStore";
-import { Annotation } from "@/components/annotations";
-import { functionsMap } from "@/config/functions";
+import { parse } from "partial-json";
 
 const normalizeAnnotation = (annotation: any): Annotation => ({
   ...annotation,
@@ -94,7 +94,7 @@ export const handleTurn = async (
       return;
     }
 
-    // Reader for streaming data
+    // Reader for streaming data;
     const reader = response.body!.getReader();
     const decoder = new TextDecoder();
     let done = false;

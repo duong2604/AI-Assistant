@@ -5,16 +5,21 @@ import {
   DropzoneEmptyState,
 } from "@/components/ui/shadcn-io/dropzone";
 
-import { useState } from "react";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "@/lib/firebase";
 import { Progress } from "@/components/ui/progress";
-import useToolsStore from "@/stores/useToolsStore";
+import { storage } from "@/lib/firebase";
 import { useInvoiceStore } from "@/stores/useInvoiceStore";
+import useToolsStore from "@/stores/useToolsStore";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { useState } from "react";
 
 export function DropZoneUploader() {
   const { vectorStore } = useToolsStore();
-  const { invoiceUrl, setInvoiceUrl } = useInvoiceStore();
+  const {
+    invoiceUrl,
+    setInvoiceUrl,
+    setInvoiceFileBase64,
+    setInvoiceFileName,
+  } = useInvoiceStore();
 
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
@@ -36,13 +41,17 @@ export function DropZoneUploader() {
     setUploading(true);
 
     const arrayBuffer = await file.arrayBuffer();
+
     const base64Content = arrayBufferToBase64(arrayBuffer);
+    setInvoiceFileBase64(base64Content);
+    setInvoiceFileName(file.name);
+
     const fileObject = {
       name: file.name,
       content: base64Content,
     };
 
-    // 1. Upload file to OpenAI Storage
+    // // 1. Upload file to OpenAI Storage
     const uploadResponse = await fetch("/api/vector_stores/upload_file", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
