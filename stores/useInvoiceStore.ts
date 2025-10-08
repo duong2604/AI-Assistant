@@ -4,9 +4,10 @@ import { create } from "zustand";
 export type Supplier = {
   id: string;
   name: string;
-  taxCode: string;
-  bankAccount: string;
-  paymentTerm: string;
+  tax_code: string;
+  bank_account: string;
+  bank: string;
+  owner: string;
 };
 
 export type Transaction = {
@@ -20,6 +21,18 @@ export type Transaction = {
   total: number;
 };
 
+export type ValidationItem = {
+  field: string;
+  supplier_value: string;
+  invoice_value: string;
+  status: string;
+  comment: string;
+};
+export type ValidationResult = {
+  overall_status: string;
+  validation_results: ValidationItem[];
+};
+
 export type InvoiceState = {
   invoiceUrl: string | null;
   invoiceFileBase64: string;
@@ -28,6 +41,8 @@ export type InvoiceState = {
   transactions: Transaction[];
   isProcessingTransaction: boolean;
   currentSupplier: Supplier | null;
+  validation: ValidationResult;
+  isProcessingValidation: boolean;
 };
 
 export type InvoiceActions = {
@@ -38,6 +53,8 @@ export type InvoiceActions = {
   setTransactions: (items: Transaction[]) => void;
   addTransactionItem: (item: Transaction) => void;
   setIsProcessingTransaction: (data: boolean) => void;
+  setValidationResult: (data: ValidationResult) => void;
+  setIsProcessingValidation: (data: boolean) => void;
 };
 
 export type InvoiceStore = InvoiceState & InvoiceActions;
@@ -50,6 +67,12 @@ export const useInvoiceStore = create<InvoiceStore>()((set, get) => ({
   suppliers: suppliers,
   transactions: [],
   isProcessingTransaction: false,
+  isProcessingValidation: false,
+  validation: {
+    overall_status: "",
+    validation_results: [],
+  },
+
   setInvoiceUrl: (fileUrl: string) => set(() => ({ invoiceUrl: fileUrl })),
   setCurrentSupplier: (supplierId: string) => {
     set(() => ({
@@ -64,4 +87,14 @@ export const useInvoiceStore = create<InvoiceStore>()((set, get) => ({
     set((state) => ({ transactions: [...state.transactions, item] })),
   setIsProcessingTransaction: (data: boolean) =>
     set(() => ({ isProcessingTransaction: data })),
+
+  setValidationResult: (data: ValidationResult) =>
+    set({
+      validation: {
+        overall_status: data.overall_status,
+        validation_results: data.validation_results,
+      },
+    }),
+  setIsProcessingValidation: (data: boolean) =>
+    set({ isProcessingValidation: data }),
 }));

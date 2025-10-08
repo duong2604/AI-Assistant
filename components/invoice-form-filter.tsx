@@ -14,8 +14,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useInvoiceStore } from "@/stores/useInvoiceStore";
+import { InvoiceStore, useInvoiceStore } from "@/stores/useInvoiceStore";
 import { useEffect } from "react";
+import { Spinner } from "./ui/spinner";
 
 const formSchema = z.object({
   supplier_name: z.string(),
@@ -28,18 +29,72 @@ const formSchema = z.object({
   total: z.number().min(0),
 });
 
-export default function InvoiceFormFilter() {
-  const { transactions } = useInvoiceStore((state) => state);
+export const handleEventMessage = async ({ event, data }: any) => {
+  const { setValidationResult, setIsProcessingValidation } =
+    useInvoiceStore.getState() as InvoiceStore;
+  if (event === "response.output_text.delta") {
+    setIsProcessingValidation(true);
+  } else if (event === "response.completed") {
+    const { response } = data;
+    const raw = response?.output[0]?.content[0]?.text;
+    const result = JSON.parse(raw);
+    setIsProcessingValidation(false);
 
-  // 1. Define your form.
+    console.log("result", result);
+    setValidationResult(result);
+  }
+};
+
+export default function InvoiceFormFilter() {
+  const { transactions, currentSupplier, isProcessingValidation } =
+    useInvoiceStore((state) => state);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const invoiceExtract = { ...values };
+    const response = await fetch("/api/validate_invoice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        supplier: currentSupplier,
+        invoiceExtract,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(`Error: ${response.status} - ${response.statusText}`);
+      return;
+    }
+    // Reader for streaming data;
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+    let buffer = "";
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      buffer += chunkValue;
+
+      const lines = buffer.split("\n\n");
+      buffer = lines.pop() || "";
+
+      for (const line of lines) {
+        if (line.startsWith("data: ")) {
+          const dataStr = line.slice(6);
+          if (dataStr === "[DONE]") {
+            done = true;
+            break;
+          }
+          const data = JSON.parse(dataStr);
+          handleEventMessage(data);
+        }
+      }
+    }
   }
 
   useEffect(() => {
@@ -171,7 +226,9 @@ export default function InvoiceFormFilter() {
               )}
             />
           </div>
-          <Button type="submit">Accept</Button>
+          <Button disabled={isProcessingValidation} type="submit">
+            {isProcessingValidation ? <Spinner /> : "Validate"}
+          </Button>
         </form>
       </Form>
     </>

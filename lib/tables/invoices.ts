@@ -3,20 +3,24 @@ import { ColumnDef } from "@tanstack/react-table";
 
 export const invoiceColumns: ColumnDef<Supplier>[] = [
   {
+    accessorKey: "id",
+    header: "NO.",
+  },
+  {
     accessorKey: "name",
     header: "Name",
   },
   {
-    accessorKey: "taxCode",
+    accessorKey: "tax_code",
     header: "Tax Code",
   },
   {
-    accessorKey: "bankAccount",
+    accessorKey: "bank_account",
     header: "Bank Account",
   },
   {
-    accessorKey: "paymentTerm",
-    header: "Payment Term",
+    accessorKey: "bank",
+    header: "Bank",
   },
 ];
 

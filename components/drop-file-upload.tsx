@@ -79,9 +79,9 @@ export function DropZoneUploader() {
         vectorStoreId: vectorStore.id,
       }),
     });
-    if (!addFileResponse.ok) {
-      throw new Error("Error adding file to vector store");
-    }
+    // if (!addFileResponse.ok) {
+    //   throw new Error("Error adding file to vector store");
+    // }
 
     // TODO Preview file upload
     // Save file to Firebase Storage

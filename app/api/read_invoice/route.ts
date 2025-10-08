@@ -93,9 +93,9 @@ export async function POST(req: NextRequest) {
             controller.enqueue(`data: ${data}\n\n`);
 
             if (event.type === "response.output_text.delta") {
-              process.stdout.write(event.delta); // Hiển thị dần
+              process.stdout.write(event.delta);
             } else if (event.type === "response.completed") {
-              console.log("\n✅ Done!");
+              console.log("\n Done!");
             }
           }
           // End of stream
