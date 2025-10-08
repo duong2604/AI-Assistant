@@ -15,6 +15,7 @@ import { useState } from "react";
 
 export default function Invoice() {
   const [isOpen, setIsOpen] = useState(false);
+  const [result, setResult] = useState<any>(null);
   const {
     invoiceUrl,
     currentSupplier,
@@ -69,6 +70,42 @@ export default function Invoice() {
         }
       }
     }
+  };
+
+  const handleAction = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    action: "accept" | "decline"
+  ) => {
+    const { transactions, validation } = useInvoiceStore.getState();
+
+    const res = await fetch("/api/approve_invoice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        invoice: transactions[0],
+        validation: validation.validation_results,
+        validationStatus: validation.overall_status,
+        userAction: action,
+        userName: "Nguyễn Văn Kế Toán",
+      }),
+    });
+
+    const data = await res.json();
+
+    setResult(data);
+  };
+
+  const handleDownload = () => {
+    if (!result) return;
+    const blob = new Blob([JSON.stringify(result, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${result.workflow_id}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -127,8 +164,22 @@ export default function Invoice() {
           <InvoiceFormFilter />
         </div>
         <div className="w-full h-full flex items-end justify-end gap-2">
-          <Button>Accept</Button>
-          <Button variant={"destructive"}>Decline</Button>
+          {!result ? (
+            <>
+              {" "}
+              <Button onClick={(e) => handleAction(e, "accept")}>Accept</Button>
+              <Button
+                variant={"destructive"}
+                onClick={(e) => handleAction(e, "decline")}
+              >
+                Decline
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button onClick={handleDownload}>Save file</Button>
+            </>
+          )}
         </div>
       </div>
     </main>
