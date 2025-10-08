@@ -30,7 +30,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <Table className="border rounded-full">
+    <Table className="border rounded-full min-h-36">
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
+            <TableCell colSpan={columns.length} className="text-center">
               No results.
             </TableCell>
           </TableRow>

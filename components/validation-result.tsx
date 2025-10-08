@@ -1,24 +1,17 @@
-import {
-  BadgeCheckIcon,
-  ChevronRightIcon,
-  CircleCheck,
-  CircleX,
-  SquareChevronRight,
-} from "lucide-react";
+import { BadgeCheckIcon, SquareChevronRight } from "lucide-react";
 
 import {
   Item,
   ItemActions,
   ItemContent,
-  ItemDescription,
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import { useInvoiceStore, ValidationItem } from "@/stores/useInvoiceStore";
-import { Progress } from "./ui/progress";
-import React from "react";
-import { ScrollArea } from "./ui/scroll-area";
 import { getStatusMeta, ValidationStatus } from "@/config/status-checker";
+import { useInvoiceStore, ValidationItem } from "@/stores/useInvoiceStore";
+import React from "react";
+import { Progress } from "./ui/progress";
+import { ScrollArea } from "./ui/scroll-area";
 
 export function ValidationResultPanel() {
   const { validation, isProcessingValidation } = useInvoiceStore();

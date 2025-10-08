@@ -118,7 +118,7 @@ export default function InvoiceFormFilter() {
                 <FormItem>
                   <FormLabel>Supplier</FormLabel>
                   <FormControl>
-                    <Input {...form.register("supplier_name")} />
+                    <Input {...form.register("supplier_name")} readOnly />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -131,7 +131,7 @@ export default function InvoiceFormFilter() {
                 <FormItem>
                   <FormLabel>Tax code</FormLabel>
                   <FormControl>
-                    <Input {...form.register("tax_code")} />
+                    <Input {...form.register("tax_code")} readOnly />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,7 +145,7 @@ export default function InvoiceFormFilter() {
                 <FormItem>
                   <FormLabel>Invoice Number</FormLabel>
                   <FormControl>
-                    <Input {...form.register("invoice_number")} />
+                    <Input {...form.register("invoice_number")} readOnly />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -159,7 +159,7 @@ export default function InvoiceFormFilter() {
                 <FormItem>
                   <FormLabel>Invoice Date</FormLabel>
                   <FormControl>
-                    <Input {...form.register("invoice_date")} />
+                    <Input {...form.register("invoice_date")} readOnly />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -174,6 +174,7 @@ export default function InvoiceFormFilter() {
                   <FormLabel>Amount</FormLabel>
                   <FormControl>
                     <Input
+                      readOnly
                       {...form.register("amount", { valueAsNumber: true })}
                     />
                   </FormControl>
@@ -189,7 +190,10 @@ export default function InvoiceFormFilter() {
                 <FormItem>
                   <FormLabel>VAT</FormLabel>
                   <FormControl>
-                    <Input {...form.register("vat", { valueAsNumber: true })} />
+                    <Input
+                      {...form.register("vat", { valueAsNumber: true })}
+                      readOnly
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -203,7 +207,7 @@ export default function InvoiceFormFilter() {
                 <FormItem>
                   <FormLabel>Expense Category</FormLabel>
                   <FormControl>
-                    <Input {...form.register("expense_category")} />
+                    <Input {...form.register("expense_category")} readOnly />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -219,6 +223,7 @@ export default function InvoiceFormFilter() {
                   <FormControl>
                     <Input
                       {...form.register("total", { valueAsNumber: true })}
+                      readOnly
                     />
                   </FormControl>
                   <FormMessage />
@@ -226,9 +231,24 @@ export default function InvoiceFormFilter() {
               )}
             />
           </div>
-          <Button disabled={isProcessingValidation} type="submit">
-            {isProcessingValidation ? <Spinner /> : "Validate"}
-          </Button>
+          {transactions.length ? (
+            <Button
+              disabled={isProcessingValidation}
+              type="submit"
+              className="flex justify-center items-center gap-2"
+            >
+              {isProcessingValidation ? (
+                <>
+                  <Spinner />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                "Validate"
+              )}
+            </Button>
+          ) : (
+            <></>
+          )}
         </form>
       </Form>
     </>
