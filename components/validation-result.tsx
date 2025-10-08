@@ -1,4 +1,8 @@
-import { BadgeCheckIcon, SquareChevronRight } from "lucide-react";
+import {
+  BadgeCheckIcon,
+  ChevronRightIcon,
+  SquareChevronRight,
+} from "lucide-react";
 
 import {
   Item,
@@ -52,7 +56,7 @@ export function ValidationResultPanel() {
       <div className="text-sm flex items-center gap-2 bg-gray-200 p-2">
         <SquareChevronRight size={16} /> Validation Console
       </div>
-      <ScrollArea className="">
+      <ScrollArea className="h-[150px] xl:h-[250px]">
         <div className="p-4 flex flex-col gap-2">
           {validation?.validation_results?.length ? (
             validation.validation_results.map((item, index) => {
@@ -93,8 +97,8 @@ export function InformationItem({ item }: InformationItemProps) {
           <BadgeCheckIcon className={`size-5 ${color}`} />
         </ItemMedia>
 
-        <ItemContent className="flex w-full justify-center gap-2">
-          <ItemTitle className="truncate">{item.comment}</ItemTitle>
+        <ItemContent className="flex justify-center gap-2 text-ellipsis">
+          <ItemTitle className="text-ellipsis">{item.comment}</ItemTitle>
         </ItemContent>
 
         <ItemActions>

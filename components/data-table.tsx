@@ -30,7 +30,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <Table className="border rounded-full min-h-36">
+    <Table className="border rounded-full min-h-16">
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
@@ -55,6 +55,7 @@ export function DataTable<TData, TValue>({
             <TableRow
               key={row.id}
               data-state={row.getIsSelected() && "selected"}
+              className="h-16"
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
@@ -65,7 +66,7 @@ export function DataTable<TData, TValue>({
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={columns.length} className="text-center">
+            <TableCell colSpan={columns.length} className="text-center h-16">
               No results.
             </TableCell>
           </TableRow>

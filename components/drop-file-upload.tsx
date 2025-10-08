@@ -51,7 +51,6 @@ export function DropZoneUploader() {
       content: base64Content,
     };
 
-    // // 1. Upload file to OpenAI Storage
     const uploadResponse = await fetch("/api/vector_stores/upload_file", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -114,7 +113,7 @@ export function DropZoneUploader() {
       //   accept={{ "files: pdf, docx": [".pdf", ".docx", ".jpeg", ".jpg"] }}
       onDrop={handleDrop}
       onError={console.error}
-      className="border-dashed"
+      className="border-dashed border-2 h-28"
     >
       {uploading ? (
         <div className="w-full min-h-full">

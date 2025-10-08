@@ -45,6 +45,24 @@ export const handleEventMessage = async ({ event, data }: any) => {
   }
 };
 
+const FILENAME = "invoice_extraction.json";
+
+export const handleDownloadJSONFile = async () => {
+  const { transactions } = useInvoiceStore.getState() as InvoiceStore;
+  const data = transactions[0];
+  const blob = new Blob([JSON.stringify(data, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = FILENAME;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
 export default function InvoiceFormFilter() {
   const { transactions, currentSupplier, isProcessingValidation } =
     useInvoiceStore((state) => state);
@@ -232,20 +250,30 @@ export default function InvoiceFormFilter() {
             />
           </div>
           {transactions.length ? (
-            <Button
-              disabled={isProcessingValidation}
-              type="submit"
-              className="flex justify-center items-center gap-2"
-            >
-              {isProcessingValidation ? (
-                <>
-                  <Spinner />
-                  <span>Processing...</span>
-                </>
-              ) : (
-                "Validate"
-              )}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                disabled={isProcessingValidation}
+                type="submit"
+                className="flex justify-center items-center gap-2"
+              >
+                {isProcessingValidation ? (
+                  <>
+                    <Spinner />
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  "Validate"
+                )}
+              </Button>
+
+              <Button
+                type={"button"}
+                variant={"outline"}
+                onClick={handleDownloadJSONFile}
+              >
+                Download json
+              </Button>
+            </div>
           ) : (
             <></>
           )}

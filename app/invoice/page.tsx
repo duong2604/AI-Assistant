@@ -27,6 +27,7 @@ export default function Invoice() {
   const data = currentSupplier ? [currentSupplier] : [];
 
   const handleProcess = async () => {
+    setIsProcessingTransaction(true);
     const response = await fetch("/api/read_invoice", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -81,7 +82,7 @@ export default function Invoice() {
         <div>
           <h1 className="text-2xl font-bold mb-6">Invoice Approval</h1>
           <div className="mb-2 mt-10 flex justify-between items-center">
-            <h3 className="font-medium">Upload an invoice</h3>
+            <h3 className="font-medium hidden md:block">Upload an invoice</h3>
             <div className="flex items-center gap-2">
               <Button disabled={!invoiceUrl}>Reset</Button>
               <Button disabled={!invoiceUrl} onClick={() => setIsOpen(true)}>
@@ -128,7 +129,6 @@ export default function Invoice() {
         <div className="w-full h-full flex items-end justify-end gap-2">
           <Button>Accept</Button>
           <Button variant={"destructive"}>Decline</Button>
-          <Button variant={"outline"}>Download json</Button>
         </div>
       </div>
     </main>
